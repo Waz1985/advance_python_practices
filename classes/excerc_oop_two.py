@@ -8,6 +8,9 @@ class Bus:
         self.passengers = []
 
     def add_passenger(self, person):
+        if not isinstance(person, Person):
+            print("Only Person objects can enter the bus.")
+            return
         if len(self.passengers) < self.max_passengers:
             self.passengers.append(person)
             print(f"{person.name} is in the bus.")
@@ -28,7 +31,7 @@ p3 = Person("Maria")
 
 bus.add_passenger(p1)
 bus.add_passenger(p2)
-bus.add_passenger(p3)
+bus.add_passenger("person")
 
 bus.remove_passenger()
 bus.remove_passenger()

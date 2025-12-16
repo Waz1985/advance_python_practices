@@ -6,81 +6,73 @@ class StudentManager:
     def __init__(self):
         self.students: List[Student] = []
 
-def valid_grade(prompt):
-    while True:
-        try:
-            grade = float(input(prompt))
-            if 0 <= grade <= 100:
-                return grade
-            print("Grade must be between 0 and 100.")
-        except:
-            print("Invalid number.")
+    def add_student(self, student: Student):
+        if self.student_exists(student.name, student.section):
+            print(f"Student {student.name} already exists.")
+            return False
+        self.students.append(student)
+        return True
+    
+    def student_exists(self, name: str, section: str) -> bool:
+        for s in self.students:
+            if s.name == name and s.section == section:
+                return True
+        return False
+    
+    def get_all_students(self) -> List[Student]:
+        return self.students
+    
+    def get_top_students(self, n: int = 3) -> List[Student]:
+        return sorted(
+            self.students, 
+            key=lambda student: student.average(), 
+            reverse=True
+            )[:n]
+    
+    def get_general_average(self) -> float:
+        if not self.students:
+            return 0.0
+        
+        total = sum(student.average() for student in self.students)
+        return total / len(self.students)
+    
+    def remove_student(self, name: str, section: str) -> bool:
+        for student in self.students:
+            if student.name == name and student.section == section:
+                self.students.remove(student)
+                return True
+        return False
+    
+    def get_failed_students(self) -> List[Student]:
+        failed = []
 
-def add_student(students):
-    print("\n--- ADD NEW STUDENT ---")
+        for s in self.students:
+            if(
+                s.spanish < 60 or
+                s.english < 60 or
+                s.socials < 60 or
+                s.science < 60
+            ):
+                failed.append(s)
+        return failed
+    
 
-    name = input("Full name: ").strip()
-    section = input("Section (example: 11B): ").strip()
+    @staticmethod
+    def is_valid_name(name: str) -> bool:
+        return bool(name.strip()) and not any(char.isdigit() for char in name)
+    
+    @staticmethod
+    def is_valid_section(section: str) -> bool:
+        return bool(re.match(r"^\d{2}[A-Z]$", section))
 
-    spanish = valid_grade("Spanish grade: ")
-    english = valid_grade("English grade: ")
-    socials = valid_grade("Social studies grade: ")
-    science = valid_grade("Science grade: ")
-
-    student = {
-        "name": name,
-        "section": section,
-        "spanish": spanish,
-        "english": english,
-        "socials": socials,
-        "science": science,
-    }
-
-    students.append(student)
-    print("\nStudent added successfully!")
-
-
-def show_all_students(students):
-    if not students:
-        print("\nNo students registered yet.")
-        return
-
-    print("\n--- ALL STUDENTS ---")
-    for s in students:
-        print(
-            f"{s['name']} | {s['section']} | "
-            f"SPA: {s['spanish']} | ENG: {s['english']} | "
-            f"SOC: {s['socials']} | SCI: {s['science']}"
-        )
-
-
-def calculate_average(student):
-    return (
-        student["spanish"] +
-        student["english"] +
-        student["socials"] +
-        student["science"]
-    ) / 4
-
-
-def show_top_3(students):
-    if not students:
-        print("\nNo students available.")
-        return
-
-    sorted_students = sorted(students, key=calculate_average, reverse=True)
-    top3 = sorted_students[:3]
-
-    print("\n--- TOP 3 STUDENTS ---")
-    for s in top3:
-        print(f"{s['name']} | {s['section']} | Average: {calculate_average(s):.2f}")
+    @staticmethod
+    def is_valid_grade(grade: float) -> bool:
+        return 0 <= grade <= 100
 
 
-def get_general_average(students):
-    if not students:
-        print("\nNo students to calculate average.")
-        return
+manager = StudentManager()
+student = Student("Ana Ruiz", "11B", 80, 90, 85, 88)
 
-    total = sum(calculate_average(s) for s in students)
-    general_avg = total / len(students)
-    print(f"\nGeneral average of all students: {general_avg:.2f}")
+manager.add_student(student)
+top = manager.get_top_students()
+avg = manager.get_general_average()
