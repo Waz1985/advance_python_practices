@@ -4,7 +4,11 @@ import math
 class Shape(ABC):
     
     @abstractmethod
-    def area(self):
+    def calculate_area(self):
+        pass
+
+    @abstractmethod
+    def calculate_perimeter(self):
         pass
 
 class Circle(Shape):
@@ -13,11 +17,13 @@ class Circle(Shape):
             raise TypeError("Radius must be a number") 
         if radius <= 0:
             raise ValueError("Radius must be greater than 0")
-
         self.radius = radius
         
-    def area(self):
+    def calculate_area(self):
         return ((math.pi * self.radius ** 2))
+    
+    def calculate_perimeter(self):
+        return ( 2 * math.pi * self.radius)
     
 class Rectangle(Shape):
     def __init__(self, width, height):
@@ -32,9 +38,11 @@ class Rectangle(Shape):
         self.width = width
         self.height = height
 
-
-    def area(self):
+    def calculate_area(self):
         return self.width * self.height
+    
+    def calculate_perimeter(self):
+        return 2*(self.width + self.height)
     
 shapes = [
     Circle(10),
@@ -43,5 +51,5 @@ shapes = [
 ]
 
 for shape in shapes:
-    print(shape.area())
+    print(shape.calculate_perimeter())
 
