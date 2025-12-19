@@ -1,8 +1,14 @@
 def is_number_validation(function):
-    def wrapper(*args):
-        if not isinstance(*args, (int, float)):
-            raise TypeError("The parameter is not a number")
-        return function(*args)
+    def wrapper(*args, **kwargs):
+        for value in args:
+            if not isinstance(value, (int, float)):
+                raise TypeError("All parameters must be numbers")
+            
+        for value in kwargs:
+            if not isinstance(value, (int, float)):
+                raise TypeError("All parameters must be numbers")
+        
+        return function(*args, **kwargs)
     return wrapper
 
 @is_number_validation
