@@ -6,6 +6,8 @@
 def search_prime_numbers(num_list):
     prime_numbers = [] 
     for num in num_list:
+        if not isinstance(num, (int, float)):
+            raise TypeError("Elements in list must be numbers")
         if num <= 1:
             continue
         for i in range(2, num):
@@ -14,4 +16,4 @@ def search_prime_numbers(num_list):
         else:
             prime_numbers.append(num)
     return prime_numbers
-print(search_prime_numbers([1, 4, 6, 7, 13, 9, 67]))
+print(search_prime_numbers(list(range(1000))))
