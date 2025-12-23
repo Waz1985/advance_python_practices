@@ -2,9 +2,12 @@
 # Esto ya lo hicimos en iterables.
 # “Hola mundo” → “odnum aloH”
 
-def reverse_strings(str):
+def reverse_strings(my_string):
+    if not isinstance(my_string, str):
+        raise TypeError("Parameter must be a string")
     reversed_str = ""
-    for char in range(len(str)-1, -1, -1):
-        reversed_str += str[char]
+    for char in range(len(my_string)-1, -1, -1):
+        reversed_str += my_string[char]
     return reversed_str
-print(reverse_strings("Hola mundo"))  # Output: odnum aloH
+
+print(reverse_strings("Hola Mundo"))

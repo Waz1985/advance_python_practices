@@ -4,8 +4,10 @@
 def sum_list(num_list):
     total = 0
     for num in num_list:
+        if not isinstance(num, (int, float)):
+            raise TypeError("Elements must be numbers")
         total = total + num
     return total
 
 
-print(sum_list([4, 6, 2, 29]))  # Output: 41
+print(sum_list(list(range(150))))  # Output: 41
